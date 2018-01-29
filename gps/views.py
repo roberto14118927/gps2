@@ -53,7 +53,7 @@ class LoginClass(View):
 			if next_url:
 			     return redirect(next_url)
 			else:
-				 return redirect('front:home')
+				 return redirect('front:gps')
 		return render(request, self.template, self.get_context() )
 
 	def post(self, request, *args, **kwargs):
@@ -67,7 +67,7 @@ class LoginClass(View):
 			if next_url:
 			     return redirect(next_url)
 			else:
-				 return redirect('front:home')
+				 return redirect('front:gps')
 		else:
 			self.message = "Username o password incorrecto"
 		return render(request, self.template, self.get_context() )
@@ -89,12 +89,12 @@ def logout(request):
 	return redirect('front:login')
 
 @login_required( login_url = 'front:login' )
-def home(request):
+def gps(request):
 	gpsus = Gpsus.objects.all()
 	context ={
 		'gpsus': gpsus
 	}
-	return render(request,'front/home.html',context)
+	return render(request,'front/gps.html',context)
 
 @login_required( login_url = 'front:login' )
 def climas(request):

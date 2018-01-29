@@ -1,0 +1,236 @@
+{% load staticfiles %}
+<!-- ================== BEGIN BASE JS ================== -->
+<script src="{% static 'plugins/jquery/jquery-1.9.1.min.js' %}"></script>
+<script src="{% static 'plugins/jquery/jquery-migrate-1.1.0.min.js' %}"></script>
+<script src="{% static 'plugins/jquery-ui/ui/minified/jquery-ui.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--[if lt IE 9]>
+	<script src="assets/crossbrowserjs/html5shiv.js"></script>
+	<script src="assets/crossbrowserjs/respond.min.js"></script>
+	<script src="assets/crossbrowserjs/excanvas.min.js"></script>
+<![endif]-->
+<script src="{% static 'plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'plugins/jquery-cookie/jquery.cookie.js' %}"></script>
+<!-- ================== END BASE JS ================== -->
+<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>-->
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBqsvI4AWS5n1ipMCbyq2CWsX6-xxrIg8&callback=init"> </script>
+<script src="{% static 'js/map-google.demo.min.js' %}"></script>
+<script src="http://192.168.1.69:5678/socket.io/socket.io.js"></script>
+<script src="{% static 'js/client.js' %}"></script>
+<script src="{% static 'js/apps.min.js' %}"></script>
+<!-- ================== END PAGE LEVEL JS ================== -->
+
+<script>
+var map;
+var markers = [];
+var html = "";
+var geocoder;
+var infowindow;
+
+$(document).ready(function() {
+  App.init();
+});
+
+function Notificacion(imei){
+      Push.create("Vehiculo en movimiento",{
+        body: "GPS UPGCH",
+        icon:"",
+        timeout:"10000",
+        vibrate: [100,100,100],
+        onClick: function()
+        {  
+          $.ajax({
+        data : {'imei':imei},
+        url : '/busqueda_ajax/',
+        type : 'get',
+        success: function(data){
+          if (data != ""){
+            moment().locale('es');
+            moment().format('MMMM Do YYYY, h:mm:ss a');
+
+            var fecha = data[0].fields.date_create;
+            fecha = String(fecha);
+            fecha = fecha.substring(0, 10);
+            var hora = data[0].fields.date_create;
+            hora = String(hora);
+            hora = hora.substring(11, 19);
+            var actividad = fecha;
+            for (var i = 0; i < actividad.length; i++) {
+              actividad = actividad.replace("-", "");
+            }
+            var año = fecha.substring(0,4);
+            var mes = fecha.substring(5,7);
+            var dia = fecha.substring(8,10);
+
+            var h = hora.substring(0,2);
+            var m = hora.substring(3,5);
+            //var tiempo = moment(actividad, "YYYYMMDD").fromNow()
+            var tiempo = moment([año,(mes-1),dia,h,m]).fromNow();
+            var conca = fecha + "," + hora;
+            html = ""; 
+            html += '<h11>LATITUD: '+data[0].fields.latit+'</h11>';
+            html += '<br/>';
+            html += '<br/>';
+            html += '<h11>LONGITUD: '+data[0].fields.longi+'</h11>';
+            html += '<br/>';
+            html += '<br/>';
+            html += '<h11>FECHA: '+ fecha +' </h11>';
+            html += '<br/>';
+            html += '<br/>';
+            html += '<h11>HORA: '+ hora +' </h11>';
+            html += '<br/>';
+            html += '<br/>';
+            html += '<h11>COMBUSTIBLE: '+data[0].fields.combu+' </h11>';
+            html += '<br/>';
+            html += '<br/>';
+            html += '<h11>ACTIVO: '+tiempo+' </h11>';
+            $('#datos').html(html);
+            var lat = data[0].fields.latit;
+            var lon = data[0].fields.longi;
+            lat = (lat*1);
+            lon = (lon*1);
+            initMap(lat,lon, 16);
+            sendimei(data[0].fields.imei);
+          }else{
+            html = ""; 
+            html = '<div></div>';
+            $('#datos').html(html);
+            $('#address').html(html);
+            init();
+            sendimei(imei);
+          }
+        }
+      });
+          this.close();
+        }
+      });
+}
+
+function init(){
+  geocoder = new google.maps.Geocoder();
+  infowindow = new google.maps.InfoWindow();
+  var uluru = {lat:16.768099, lng:-93.0854785};
+  map = new google.maps.Map(document.getElementById('mapa'), {
+	  zoom:7,
+	  center: uluru
+  });
+}
+
+function initMap(latin, lngin, zin) {
+  setMapOnAll(null);
+  var uluru = {lat:latin, lng:lngin};
+
+  var marker = new google.maps.Marker({
+    position: uluru,
+    map: map,
+    draggable: true,
+	  title: 'Arrastrame'
+  });
+  markers.push(marker);
+
+  map.setZoom(zin);
+  map.panTo(marker.position);
+
+  google.maps.event.addListener(marker, 'position_changed', function(){
+			getMarkerCoords(marker)
+  });
+
+  function setMapOnAll(map) {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+    }
+  }  
+  var latlng = new google.maps.LatLng(latin, lngin);
+  geocoder.geocode ({'latLng': latlng}, function(results, status) {
+	    if (status == google.maps.GeocoderStatus.OK) {
+	      if (results[0]) {
+	          $('#address').text(results[0].formatted_address);
+	            //map.fitBounds(results[0].geometry.viewport);
+	            //marker.setMap(map);
+	            //marker.setPosition(latlng);           
+	            infowindow.setContent(results[0].formatted_address);
+	            infowindow.open(map, marker);
+	       }
+	    }
+		else {
+		     $('#address').text("direccion error");
+		}
+	});
+}
+
+function call_imei(imei){
+	$.ajax({
+	  data : {'imei':imei},
+	  url : '/busqueda_ajax/',
+	  type : 'get',
+	  success: function(data){
+	    if (data != ""){
+	      moment().locale('es');
+	      moment().format('MMMM Do YYYY, h:mm:ss a');
+
+	      var fecha = data[0].fields.date_create;
+	      fecha = String(fecha);
+	      fecha = fecha.substring(0, 10);
+	      var hora = data[0].fields.date_create;
+	      hora = String(hora);
+	      hora = hora.substring(11, 19);
+	      var actividad = fecha;
+	      for (var i = 0; i < actividad.length; i++) {
+	        actividad = actividad.replace("-", "");
+	      }
+	      var año = fecha.substring(0,4);
+	      var mes = fecha.substring(5,7);
+	      var dia = fecha.substring(8,10);
+
+	      var h = hora.substring(0,2);
+	      var m = hora.substring(3,5);
+	      //var tiempo = moment(actividad, "YYYYMMDD").fromNow()
+	      var tiempo = moment([año,(mes-1),dia,h,m]).fromNow();
+	      var conca = fecha + "," + hora;
+	      html = ""; 
+	      html += '<li class="has-sub expand">';
+		  html += '<a href="javascript:;">';				
+	      html += '<i class="material-icons">inbox</i>';
+		  html += '<span>Informacion GPS</span>'
+		  html += '<li><a>fecha: '+ fecha +'</a></li>';
+		  html += '<li><a>hora: '+ hora +'</a></li>';
+	      html += '<li><a>activo: '+tiempo+' </a></li>';
+	      html += '</a>';
+          html += '</li>';
+          $('#datos').html(html);
+	      /*html += '<h11>LATITUD: '+data[0].fields.latit+'</h11>';
+	      html += '<br/>';
+	      html += '<br/>';
+	      html += '<h11>LONGITUD: '+data[0].fields.longi+'</h11>';
+	      html += '<br/>';
+	      html += '<br/>';
+	      html += '<h11>FECHA: '+ fecha +' </h11>';
+	      html += '<br/>';
+	      html += '<br/>';
+	      html += '<h11>HORA: '+ hora +' </h11>';
+	      html += '<br/>';
+	      html += '<br/>';
+	      html += '<h11>COMBUSTIBLE: '+data[0].fields.combu+' </h11>';
+	      html += '<br/>';
+	      html += '<br/>';
+	      html += '<h11>ACTIVO: '+tiempo+' </h11>';
+	      $('#datos').html(html);*/
+	      var lat = data[0].fields.latit;
+	      var lon = data[0].fields.longi;
+	      lat = (lat*1);
+	      lon = (lon*1);
+	      initMap(lat,lon, 16);
+	      sendimei(data[0].fields.imei);
+	    }else{
+	      html = ""; 
+	      html = '<div></div>';
+	      $('#datos').html(html);
+	      $('#address').html(html);
+	      init();
+	      sendimei(imei);
+	    }
+	  }
+	});
+}
+</script>

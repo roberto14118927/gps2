@@ -132,13 +132,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR,"assets")]
+"""STATICFILES_DIRS = [os.path.join(BASE_DIR,"assets")]
 
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'media')
 
+MEDIA_URL = '/media/'"""
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static','media')
 
 """try:
     from gps2.local_settings import *

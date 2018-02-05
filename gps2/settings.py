@@ -143,7 +143,7 @@ MEDIA_URL = '/media/'"""
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static','media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static',)
 
 """try:
     from gps2.local_settings import *

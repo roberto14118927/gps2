@@ -140,7 +140,7 @@ MEDIA_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 
 
 MEDIA_URL = '/media/'
 
-try:
+"""try:
     from gps2.local_settings import *
 except Exception as e:
-    pass
+    pass"""

@@ -41,6 +41,12 @@ from gps.models import Gpsub
 #importaciones sobre el sistema operativo
 import os
 from django.conf import settings
+import datetime
+from django.utils.dateparse import parse_datetime
+import pytz
+from django.core import serializers
+from django.utils.timezone import utc
+import simplejson as json
 
 class LoginClass(View):
 	form = LoginUserForm()
@@ -83,10 +89,36 @@ class BusquedaAjaxView(TemplateView):
 			fields=('imei', 'latit', 'longi', 'combu','date_create'))
 		return HttpResponse(data, content_type='application/json')
 
+class TrazaRuta(TemplateView):
+	def get(self, request, *args, **kwargs):
+    	#la = pytz.timezone('America/Mexico_City')
+		dateStart = request.GET['dateStart']
+		dateEnd = request.GET['dateEnd']
+		la = pytz.timezone('America/New_York')
+		print(dateStart)
+		print(dateEnd)
+		start = datetime.datetime.strptime(dateStart, '%Y-%m-%d %H:%M:%S')
+		end = datetime.datetime.strptime(dateEnd, '%Y-%m-%d %H:%M:%S')
+		aware_start_time = la.localize(start)
+		aware_end_time = la.localize(end)
+		gpsfe = Gpsub.objects.filter(date_create__range=(aware_start_time, aware_end_time)).order_by('date_create')
+		json_list=[]
+		for entry in gpsfe:
+			if (entry.latit != "NaN" and entry.longi != "NaN"):
+				lat = entry.latit
+				lon = entry.longi
+				lat1 = float(lat)
+				lon1 = float(lon)
+				json_entry = {'lat':lat1, 'lng':lon1}
+				json_list.append(json_entry)
+		return HttpResponse(json.dumps(json_list), content_type='application/json')
+
 @login_required( login_url = 'front:login' )
 def logout(request):
 	logout_django(request)
 	return redirect('front:login')
+
+
 
 @login_required( login_url = 'front:login' )
 def gps(request):

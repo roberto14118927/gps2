@@ -12,12 +12,29 @@
 <script src="{% static 'plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
 <script src="{% static 'plugins/jquery-cookie/jquery.cookie.js' %}"></script>
 <!-- ================== END BASE JS ================== -->
+<script src="{% static 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>-->
-<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBqsvI4AWS5n1ipMCbyq2CWsX6-xxrIg8&callback=init"> </script>
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBqsvI4AWS5n1ipMCbyq2CWsX6-xxrIg8&callback=init&sensor=false"> </script>
 <script src="{% static 'js/map-google.demo.min.js' %}"></script>
 <script src="http://192.168.1.69:5678/socket.io/socket.io.js"></script>
 <script src="{% static 'js/client.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<!--<script src="{% static 'plugins/ionRangeSlider/js/ion-rangeSlider/ion.rangeSlider.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js' %}"></script>
+<script src="{% static 'plugins/masked-input/masked-input.min.js' %}"></script>-->
+<script src="{% static 'plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js' %}"></script>
+<script src="{% static 'plugins/password-indicator/js/password-indicator.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-combobox/js/bootstrap-combobox.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput-typeahead.js' %}"></script>
+<script src="{% static 'plugins/jquery-tag-it/js/tag-it.min.js' %}"></script>
+<!--<script src="{% static 'plugins/bootstrap-daterangepicker/moment.js' %}"></script>-->
+<script src="{% static 'plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<script src="{% static 'plugins/select2/dist/js/select2.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-eonasdan-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'js/form-plugins.demo.min.js' %}"></script>
 <script src="{% static 'js/apps.min.js' %}"></script>
 <!-- ================== END PAGE LEVEL JS ================== -->
 
@@ -30,6 +47,9 @@ var infowindow;
 
 $(document).ready(function() {
   App.init();
+
+  $('#datetimepicker1').datetimepicker();
+  $('#datetimepicker2').datetimepicker();
 });
 
 function Notificacion(imei){
@@ -85,7 +105,7 @@ function Notificacion(imei){
             html += '<br/>';
             html += '<br/>';
             html += '<h11>ACTIVO: '+tiempo+' </h11>';
-            $('#datos').html(html);
+            //$('#datos').html(html);
             var lat = data[0].fields.latit;
             var lon = data[0].fields.longi;
             lat = (lat*1);
@@ -199,7 +219,7 @@ function call_imei(imei){
         html += '</a>';
         html += '</li>';
         $('#datos').html(html);*/
-        html += '<hr/>';
+        /*html += '<hr/>';
         html += '<h8 style="font-size:15px; color:white;"> LATITUD: '+data[0].fields.latit+'</h8>';
         html += '<br/>';
         html += '<br/>';
@@ -214,11 +234,11 @@ function call_imei(imei){
         html += '<br/>';
         html += '<h8 style="font-size:15px; color:white;"> COMBUSTIBLE: '+data[0].fields.combu+' </h8>';
         html += '<br/>';
-        html += '<br/>';
+        html += '<br/>';*/
         html += '<h8 style="font-size:15px; color:white;"> ACTIVO: '+tiempo+' </h8>';
         html += '<br/>';
         html += '<br/>';
-        $('#datos').html(html);
+        //$('#datos').html(html);
         var lat = data[0].fields.latit;
         var lon = data[0].fields.longi;
         lat = (lat*1);
@@ -236,4 +256,49 @@ function call_imei(imei){
     }
   });
 }
+
+function openModal1(){
+  $("#modal-dialog").modal('show')
+}
+function trazaRuta(){
+  var dateStart = "";
+  var dateEnd = "";
+  dateStart = document.getElementById('dateStarth').value;
+  dateEnd = document.getElementById('dateEndh').value;
+  var dateStartOut = moment(dateStart,'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+  var dateEndOut = moment(dateEnd,'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+  $.ajax({
+    data : {'dateStart':dateStartOut, 'dateEnd':dateEndOut},
+    url : '/traza_ajax/',
+    type : 'get',
+    success: function(data){
+      var dato = data;
+      $("#modal-dialog").modal('hide');  
+      var myJSON = JSON.stringify(data); 
+      //myJSON = myJSON.replace("[",""); 
+      //myJSON = myJSON.replace("]",""); 
+      alert(myJSON); 
+      var flightPlanCoordinates = [
+          {lat: 16.7574333, lng: -93.0850833},
+          {lat: 16.7574333, lng: -93.0850833},
+          {lat: 16.7574333, lng: -93.0850833},
+          {lat: 16.7574333, lng: -93.0850833}
+        ];
+        var myJSON1 = JSON.stringify(flightPlanCoordinates); 
+        alert(myJSON1);
+      var flightPath = new google.maps.Polyline({
+        path: dato,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 6
+      });
+       
+      // Creando la ruta en el mapa
+      flightPath.setMap(map);
+      
+    }
+  });
+}
+
 </script>

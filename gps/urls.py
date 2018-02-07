@@ -7,6 +7,7 @@ from gps.views import gps
 from gps.views import climas
 from gps.views import logout
 from gps.views import BusquedaAjaxView
+from gps.views import TrazaRuta
 from . import views
 
 app_name = 'front'
@@ -18,4 +19,5 @@ urlpatterns = [
 	url(r'^climas$', climas, name = 'climas'),
 	url(r'^logout$', logout, name = 'logout'),
 	url(r'^busqueda_ajax/$', BusquedaAjaxView.as_view()),
+	url(r'^traza_ajax/$', TrazaRuta.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

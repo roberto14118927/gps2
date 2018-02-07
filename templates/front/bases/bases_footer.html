@@ -274,26 +274,14 @@ function trazaRuta(){
     success: function(data){
       var dato = data;
       $("#modal-dialog").modal('hide');  
-      var myJSON = JSON.stringify(data); 
-      //myJSON = myJSON.replace("[",""); 
-      //myJSON = myJSON.replace("]",""); 
-      alert(myJSON); 
-      var flightPlanCoordinates = [
-          {lat: 16.7574333, lng: -93.0850833},
-          {lat: 16.7574333, lng: -93.0850833},
-          {lat: 16.7574333, lng: -93.0850833},
-          {lat: 16.7574333, lng: -93.0850833}
-        ];
-        var myJSON1 = JSON.stringify(flightPlanCoordinates); 
-        alert(myJSON1);
+      //var myJSON = JSON.stringify(data); 
       var flightPath = new google.maps.Polyline({
         path: dato,
         geodesic: true,
         strokeColor: '#FF0000',
-        strokeOpacity: 1.0,
-        strokeWeight: 6
+        strokeOpacity: 0.5,
+        strokeWeight: 8
       });
-       
       // Creando la ruta en el mapa
       flightPath.setMap(map);
       

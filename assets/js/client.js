@@ -1,4 +1,4 @@
-var URL = 'http://gpspgch.ddns.net:5678';
+var URL = 'http://142.44.162.71:5678';
 var imei_global = "00000000000";
 
  var socket = io.connect(URL, {'forceNew': true

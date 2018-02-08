@@ -37,6 +37,7 @@ from django.core import serializers
 
 from gps.models import Gpsus
 from gps.models import Gpsub
+from gps.models import Gpson
 
 #importaciones sobre el sistema operativo
 import os
@@ -47,6 +48,8 @@ import pytz
 from django.core import serializers
 from django.utils.timezone import utc
 import simplejson as json
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 class LoginClass(View):
 	form = LoginUserForm()
@@ -94,14 +97,13 @@ class TrazaRuta(TemplateView):
     	#la = pytz.timezone('America/Mexico_City')
 		dateStart = request.GET['dateStart']
 		dateEnd = request.GET['dateEnd']
+		imeig = request.GET['imeig']
 		la = pytz.timezone('America/New_York')
-		print(dateStart)
-		print(dateEnd)
 		start = datetime.datetime.strptime(dateStart, '%Y-%m-%d %H:%M:%S')
 		end = datetime.datetime.strptime(dateEnd, '%Y-%m-%d %H:%M:%S')
 		aware_start_time = la.localize(start)
 		aware_end_time = la.localize(end)
-		gpsfe = Gpsub.objects.filter(date_create__range=(aware_start_time, aware_end_time)).order_by('date_create')
+		gpsfe = Gpsub.objects.filter(date_create__range=(aware_start_time, aware_end_time), imei__exact=imeig).order_by('date_create')
 		json_list=[]
 		for entry in gpsfe:
 			if (entry.latit != "NaN" and entry.longi != "NaN"):
@@ -112,6 +114,36 @@ class TrazaRuta(TemplateView):
 				json_entry = {'lat':lat1, 'lng':lon1}
 				json_list.append(json_entry)
 		return HttpResponse(json.dumps(json_list), content_type='application/json')
+
+class UsuarioActivo(TemplateView):
+	def get(self, request, *args, **kwargs):
+		data = dict()
+		dateSearch = request.GET['dateSearch']
+		la = pytz.timezone('America/New_York')
+		dateSearch = dateSearch[:10]
+		data['form_is_valid'] = True
+		dateSearchStar = dateSearch +" 00:00:00"
+		dateSearchEnd = dateSearch + " 23:59:59"
+		start = datetime.datetime.strptime(dateSearchStar, '%Y-%m-%d %H:%M:%S')
+		end = datetime.datetime.strptime(dateSearchEnd, '%Y-%m-%d %H:%M:%S')
+		aware_start_time = la.localize(start)
+		aware_end_time = la.localize(end)
+		gpson = Gpson.objects.filter(date_create__range=(aware_start_time, aware_end_time)).order_by('-date_create')
+		data['html_usuarios_list'] = render_to_string('front/includ/list_usuarios.html', {
+			'gpson': gpson
+		})
+		return JsonResponse(data)
+
+class ListaConductor(TemplateView):
+	def get(self, request, *args, **kwargs):
+		data = dict()
+		data['form_is_valid'] = True
+		gpsu = Gpsus.objects.all()
+		data['html_lista_conductores'] = render_to_string('front/includ/list_conductores.html', {
+			'gpsu': gpsu
+		})
+		return JsonResponse(data)
+
 
 @login_required( login_url = 'front:login' )
 def logout(request):

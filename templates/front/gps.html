@@ -68,12 +68,12 @@
 						<div class="divider"></div>
 						<div class="row m-t-10">
 							<div class="col-md-12">
-								<a href="javascript:openModal1();" class="btn btn-primary btn-sm m-r-5">
+								<a href="#modal-dialog" class="btn btn-primary btn-sm m-r-5" data-toggle="modal">
 									<i class="fa fa-car"></i>
 									Ver rutas de vehiculo
 								</a>
-							</div>
-							<!--<div class="col-md-5 control-label double-line">Header Styling</div>
+							</div>														
+						<!--<div class="col-md-5 control-label double-line">Header Styling</div>
 							<div class="col-md-7">
 								<select name="header-styling" class="form-control input-sm">
 									<option value="1">default</option>
@@ -82,6 +82,12 @@
 							</div>-->
 						</div>
 						<div class="row m-t-10">
+								<div class="col-md-12">
+										<a href="javascript:lista_usuarios();" class="btn btn-danger btn-sm m-r-5" >
+											<i class="fa fa-car"></i>
+											Vehiculos activos hoy
+										</a>
+									</div>
 							<!--<div class="col-md-5 control-label">Header</div>
 							<div class="col-md-7">
 								<select name="header-fixed" class="form-control input-sm">
@@ -91,6 +97,13 @@
 							</div>-->
 						</div>
 						<div class="row m-t-10">
+								
+									<div class="col-md-12">
+											<a href="javascript:lista_conductores();" class="btn btn-warning btn-sm m-r-5" >
+												<i class="fa fa-car"></i>
+												Lista de conductores
+											</a>
+										</div>
 							<!--<div class="col-md-5 control-label double-line">Sidebar Styling</div>
 							<div class="col-md-7">
 								<select name="sidebar-styling" class="form-control input-sm">
@@ -157,19 +170,90 @@
 									</span>
 								</div>
 							</div>
-							<!--<div class="col-md-12">
-								<div class="input-group input-daterange">
-									<input type="text" class="form-control" name="start" placeholder="Date Start">
-									<span class="input-group-addon">to</span>
-									<input type="text" class="form-control" name="end" placeholder="Date End">
-								</div>
-							</div>-->
 						</div>
 						<br>
 					</div>
 					<div class="modal-footer"> 
 						<a href="javascript:;" class="btn btn-sm btn-white" data-dismiss="modal">Cerrar</a>
 						<a href="javascript:trazaRuta();" class="btn btn-sm btn-success">Aceptar</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade in" id="modal-dialog1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header" >
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h4 class="modal-title" style="text-align: center; font-size:38px" >Vehiculos activos</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<div class="col-md-10">
+								<div class="input-group date" id="datetimepicker3">
+									<input type="text" class="form-control" id="dateSearch" placeholder="Buscar por fechas" style="text-align: center;">
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<a href="javascript:date_busca();" class="btn btn-warning btn-icon btn-circle btn-lg"><i class="fa fa-search"></i></a>
+							</div>
+						</div>
+						<br>
+						<br>
+						<!-- begin panel -->
+						<div class="panel panel-inverse">
+							<div class="panel-body">
+								<div id="rtabla">
+										{% include 'front/includ/list_usuarios.html' %}
+								</div>
+							</div>
+						</div>
+						<br>
+					</div>
+					<div class="modal-footer"> 
+						<a href="javascript:;" class="btn btn-sm btn-success" data-dismiss="modal">Cerrar</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade in" id="modal-dialog2">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header" >
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h4 class="modal-title" style="text-align: center; font-size:38px" >Lista de Conductores</h4>
+					</div>
+					<div class="modal-body">
+						<!--<div class="form-group">
+							<div class="col-md-10">
+								<div class="input-group date" id="datetimepicker3">
+									<input type="text" class="form-control" id="dateSearch" placeholder="Buscar por fechas" style="text-align: center;">
+									<span class="input-group-addon">
+										<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<a href="javascript:date_busca();" class="btn btn-warning btn-icon btn-circle btn-lg"><i class="fa fa-search"></i></a>
+							</div>
+						</div>-->
+						<!-- begin panel -->
+						<div class="panel panel-inverse">
+							<div class="panel-body">
+								<div id="rtabla1">
+										{% include 'front/includ/list_conductores.html' %}
+								</div>
+							</div>
+						</div>
+						<br>
+					</div>
+					<div class="modal-footer"> 
+						<a href="javascript:;" class="btn btn-sm btn-success" data-dismiss="modal">Cerrar</a>
 					</div>
 				</div>
 			</div>

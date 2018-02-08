@@ -1,0 +1,26 @@
+{% if gpsu %}
+<table id="data-table1" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Unidad</th>
+            <th>Detalles</th>		
+        </tr>
+    </thead>
+    <tbody>
+        {% for conductores in gpsu %}
+        <tr class="odd gradeX">
+            <td>{{ conductores.cmp_nombre }}</td>
+            <td>{{ conductores.cmp_unidad }}</td>
+            <td><a href="javascript:detalle_conductor({{conductores.id_user}});" class="btn btn-success btn-icon btn-circle btn-lg"><i class="fa fa-user"></i></a></td>
+        </tr>
+        {% empty %}
+        <tr class="odd gradeX">
+            <td> No hay activos</td>
+            <td> No hay activos</td>
+            <td> No hay activos</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}

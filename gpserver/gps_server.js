@@ -35,10 +35,10 @@ const { Pool, Client } = require('pg')
 });*/
 
 const client = new Client({
-  user: 'postgres',
+  user: 'gps',
   host: 'localhost',
   database: 'gpsdb',
-  password: '123456',
+  password: 'gps123456',
   port: 5432,
 });
 
@@ -175,6 +175,9 @@ net.createServer(function(sock) {
                  if (err) {
                    console.log(err.stack)
                  } else {
+                  io.emit('notificacion', {
+                        imei:imei
+                  });  
                    console.log(res.rows[0])
                    }
                });

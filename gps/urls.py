@@ -8,6 +8,8 @@ from gps.views import climas
 from gps.views import logout
 from gps.views import BusquedaAjaxView
 from gps.views import TrazaRuta
+from gps.views import UsuarioActivo
+from gps.views import ListaConductor
 from . import views
 
 app_name = 'front'
@@ -20,4 +22,6 @@ urlpatterns = [
 	url(r'^logout$', logout, name = 'logout'),
 	url(r'^busqueda_ajax/$', BusquedaAjaxView.as_view()),
 	url(r'^traza_ajax/$', TrazaRuta.as_view()),
+	url(r'^usuarioactivo_ajax/$', UsuarioActivo.as_view()),
+	url(r'^listaconductores_ajax/$', ListaConductor.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

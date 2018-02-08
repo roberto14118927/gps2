@@ -12,7 +12,6 @@
 <script src="{% static 'plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
 <script src="{% static 'plugins/jquery-cookie/jquery.cookie.js' %}"></script>
 <!-- ================== END BASE JS ================== -->
-<script src="{% static 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>-->
 <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBqsvI4AWS5n1ipMCbyq2CWsX6-xxrIg8&callback=init"> </script>
@@ -23,17 +22,29 @@
 <!--<script src="{% static 'plugins/ionRangeSlider/js/ion-rangeSlider/ion.rangeSlider.min.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js' %}"></script>
 <script src="{% static 'plugins/masked-input/masked-input.min.js' %}"></script>-->
-<script src="{% static 'plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js' %}"></script>
+<!--<script src="{% static 'plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js' %}"></script>
 <script src="{% static 'plugins/password-indicator/js/password-indicator.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-combobox/js/bootstrap-combobox.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
 <script src="{% static 'plugins/bootstrap-tagsinput/bootstrap-tagsinput-typeahead.js' %}"></script>
-<script src="{% static 'plugins/jquery-tag-it/js/tag-it.min.js' %}"></script>
+<script src="{% static 'plugins/jquery-tag-it/js/tag-it.min.js' %}"></script>-->
 <!--<script src="{% static 'plugins/bootstrap-daterangepicker/moment.js' %}"></script>-->
-<script src="{% static 'plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
-<script src="{% static 'plugins/select2/dist/js/select2.min.js' %}"></script>
+<!--<script src="{% static 'plugins/bootstrap-daterangepicker/daterangepicker.js' %}"></script>-->
+<!--<script src="{% static 'plugins/select2/dist/js/select2.min.js' %}"></script>-->
 <script src="{% static 'plugins/bootstrap-eonasdan-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'plugins/DataTables/media/js/jquery.dataTables.js' %}"></script>
+<script src="{% static 'plugins/DataTables/media/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'plugins/DataTables/extensions/Buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'plugins/DataTables/extensions/Buttons/js/buttons.bootstrap.min.js' %}"></script>
+<script src="{% static 'plugins/DataTables/extensions/Buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'plugins/DataTables/extensions/Buttons/js/jszip.min.js' %}"></script>
+<script src="{% static 'plugins/DataTables/extensions/Buttons/js/pdfmake.min.js' %}"></script>
+<script src="{% static 'plugins/DataTables/extensions/Buttons/js/vfs_fonts.min.js' %}"></script>
+<script src="{% static 'plugins/DataTables/extensions/Buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'plugins/DataTables/extensions/Buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'js/table-manage-buttons.demo.min.js' %}"></script>
 <script src="{% static 'js/form-plugins.demo.min.js' %}"></script>
 <script src="{% static 'js/apps.min.js' %}"></script>
 <!-- ================== END PAGE LEVEL JS ================== -->
@@ -44,12 +55,18 @@ var markers = [];
 var html = "";
 var geocoder;
 var infowindow;
+var imeig = "";
 
 $(document).ready(function() {
   App.init();
 
   $('#datetimepicker1').datetimepicker();
   $('#datetimepicker2').datetimepicker();
+  $('#datetimepicker3').datetimepicker();
+
+
+
+  //TableManageButtons.init();
 });
 
 function Notificacion(imei){
@@ -180,6 +197,7 @@ function initMap(latin, lngin, zin) {
 }
 
 function call_imei(imei){
+  imeig = imei;
   $.ajax({
     data : {'imei':imei},
     url : '/busqueda_ajax/',
@@ -235,10 +253,11 @@ function call_imei(imei){
         html += '<h8 style="font-size:15px; color:white;"> COMBUSTIBLE: '+data[0].fields.combu+' </h8>';
         html += '<br/>';
         html += '<br/>';*/
-        html += '<h8 style="font-size:15px; color:white;"> ACTIVO: '+tiempo+' </h8>';
+        /*html += '<h8 style="font-size:15px; color:white;"> ACTIVO: '+tiempo+' </h8>';
         html += '<br/>';
-        html += '<br/>';
-        //$('#datos').html(html);
+        html += '<br/>';*/
+        html += '<span class="text-danger">'+tiempo+'</span>';
+        $('#actividad').html(html);
         var lat = data[0].fields.latit;
         var lon = data[0].fields.longi;
         lat = (lat*1);
@@ -257,34 +276,135 @@ function call_imei(imei){
   });
 }
 
-function openModal1(){
-  $("#modal-dialog").modal('show')
-}
 function trazaRuta(){
-  var dateStart = "";
-  var dateEnd = "";
-  dateStart = document.getElementById('dateStarth').value;
-  dateEnd = document.getElementById('dateEndh').value;
-  var dateStartOut = moment(dateStart,'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
-  var dateEndOut = moment(dateEnd,'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+  if(imeig != ""){
+      var dateStart = document.getElementById('dateStarth').value;
+      var dateEnd = document.getElementById('dateEndh').value;
+      $.ajax({
+        data : {'dateStart':moment(dateStart,'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'), 'dateEnd':moment(dateEnd,'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'),'imeig':imeig},
+        url : '/traza_ajax/',
+        type : 'get',
+        success: function(data){
+          var dato = data;
+          $("#modal-dialog").modal('hide');  
+          //var myJSON = JSON.stringify(data); 
+          var flightPath = new google.maps.Polyline({
+            path: dato,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.5,
+            strokeWeight: 6
+          });
+          // Creando la ruta en el mapa
+          flightPath.setMap(map);
+          
+        }
+      });
+  }else{
+    alert("Seleccione un usuario")
+  }
+}
+
+function lista_usuarios(){
+  $("#modal-dialog1").modal('show');  
+}
+
+function date_busca(){
+  var dateSearch = document.getElementById('dateSearch').value;
+  if(dateSearch != ""){
+    $.ajax({
+      data : {'dateSearch':moment(dateSearch,'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')},
+      url : '/usuarioactivo_ajax/',
+      type : 'get',
+      success: function(data){
+        if (data.form_is_valid) {
+          $("#rtabla").html(data.html_usuarios_list); 
+          if ($('#data-table').length !== 0) {
+            $('#data-table').DataTable({
+              language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'copy', className: 'btn-sm' },
+                    { extend: 'csv', className: 'btn-sm' },
+                    { extend: 'excel', className: 'btn-sm' },
+                    { extend: 'pdf', className: 'btn-sm' },
+                    { extend: 'print', className: 'btn-sm' }
+                ],
+                responsive: true
+            });
+        }
+          //TableManageButtons.init(); 
+        } 
+      }
+    });
+  }else{
+    alert("Llene el campo de fecha");
+  }
+}
+
+function lista_conductores(){
+  $("#modal-dialog2").modal('show');  
   $.ajax({
-    data : {'dateStart':dateStartOut, 'dateEnd':dateEndOut},
-    url : '/traza_ajax/',
+    data : {},
+    url : '/listaconductores_ajax/',
     type : 'get',
     success: function(data){
-      var dato = data;
-      $("#modal-dialog").modal('hide');  
-      //var myJSON = JSON.stringify(data); 
-      var flightPath = new google.maps.Polyline({
-        path: dato,
-        geodesic: true,
-        strokeColor: '#FF0000',
-        strokeOpacity: 0.5,
-        strokeWeight: 8
-      });
-      // Creando la ruta en el mapa
-      flightPath.setMap(map);
-      
+      if (data.form_is_valid) {
+        $("#rtabla1").html(data.html_lista_conductores); 
+        //TableManageButtons.init(); 
+        if ($('#data-table1').length !== 0) {
+          $('#data-table1').DataTable({
+            language: {
+              "decimal": "",
+              "emptyTable": "No hay información",
+              "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+              "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+              "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+              "infoPostFix": "",
+              "thousands": ",",
+              "lengthMenu": "Mostrar _MENU_ Entradas",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "Buscar:",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+              }
+          },
+              dom: 'Bfrtip',
+              buttons: [
+                  { extend: 'copy', className: 'btn-sm' },
+                  { extend: 'csv', className: 'btn-sm' },
+                  { extend: 'excel', className: 'btn-sm' },
+                  { extend: 'pdf', className: 'btn-sm' },
+                  { extend: 'print', className: 'btn-sm' }
+              ],
+              responsive: true
+          });
+      }
+      } 
     }
   });
 }

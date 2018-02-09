@@ -129,7 +129,7 @@ class UsuarioActivo(TemplateView):
 		aware_start_time = la.localize(start)
 		aware_end_time = la.localize(end)
 		gpson = Gpson.objects.filter(date_create__range=(aware_start_time, aware_end_time)).order_by('-date_create')
-		data['html_usuarios_list'] = render_to_string('front/includ/list_usuarios.html', {
+		data['html_usuarios_list'] = render_to_string('front/bases/includ/list_usuarios.html', {
 			'gpson': gpson
 		})
 		return JsonResponse(data)
@@ -139,7 +139,7 @@ class ListaConductor(TemplateView):
 		data = dict()
 		data['form_is_valid'] = True
 		gpsu = Gpsus.objects.all()
-		data['html_lista_conductores'] = render_to_string('front/includ/list_conductores.html', {
+		data['html_lista_conductores'] = render_to_string('front/bases/includ/list_conductores.html', {
 			'gpsu': gpsu
 		})
 		return JsonResponse(data)

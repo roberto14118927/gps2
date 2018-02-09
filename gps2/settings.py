@@ -23,13 +23,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '%1cqwy86ivs0(-$*6y#c88=hxjaw#7$qdxf%=i%jz5r(k+-tag'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
+DEBUG = False
 
-DEBUG = True
+#DEBUG = True
 
-#ALLOWED_HOSTS = ['gpspgch.ddns.net']
+ALLOWED_HOSTS = ['gpspgch.ddns.net']
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -147,14 +147,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR,"assets")]
+"""STATICFILES_DIRS = [os.path.join(BASE_DIR,"assets")]
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = '/media/'"""
 
-"""PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static',)
-"""
+
 

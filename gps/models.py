@@ -14,7 +14,7 @@ class Gpsus(models.Model):
 	date_create = models.DateTimeField(auto_now_add=True, blank=True)
 
 	def __str__(self):
-		return self.imei
+		return self.cmp_nombre
 
 class Gpson(models.Model):
 	id_gpson = models.AutoField(primary_key = True)

@@ -370,7 +370,6 @@ function lista_conductores(){
     success: function(data){
       if (data.form_is_valid) {
         $("#rtabla1").html(data.html_lista_conductores); 
-        //TableManageButtons.init(); 
         if ($('#data-table1').length !== 0) {
           $('#data-table1').DataTable({
             language: {
@@ -408,5 +407,7 @@ function lista_conductores(){
     }
   });
 }
+
+
 
 </script>

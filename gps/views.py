@@ -94,11 +94,12 @@ class BusquedaAjaxView(TemplateView):
 
 class TrazaRuta(TemplateView):
 	def get(self, request, *args, **kwargs):
-    	#la = pytz.timezone('America/Mexico_City')
+    	
 		dateStart = request.GET['dateStart']
 		dateEnd = request.GET['dateEnd']
 		imeig = request.GET['imeig']
-		la = pytz.timezone('America/New_York')
+		la = pytz.timezone('America/Mexico_City')
+		#la = pytz.timezone('America/New_York')
 		start = datetime.datetime.strptime(dateStart, '%Y-%m-%d %H:%M:%S')
 		end = datetime.datetime.strptime(dateEnd, '%Y-%m-%d %H:%M:%S')
 		aware_start_time = la.localize(start)
@@ -119,7 +120,8 @@ class UsuarioActivo(TemplateView):
 	def get(self, request, *args, **kwargs):
 		data = dict()
 		dateSearch = request.GET['dateSearch']
-		la = pytz.timezone('America/New_York')
+		#la = pytz.timezone('America/New_York')
+		la = pytz.timezone('America/Mexico_City')
 		dateSearch = dateSearch[:10]
 		data['form_is_valid'] = True
 		dateSearchStar = dateSearch +" 00:00:00"

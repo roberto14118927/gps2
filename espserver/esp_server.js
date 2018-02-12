@@ -114,7 +114,7 @@ var ESP8266 = net.createServer(function(sock) {
             const text = 'SELECT * FROM gps_espregister WHERE mac=($1)'
             const values = [mac_in]
             client.query(text, values, (err, res) => {
-              done();
+              //done();
               if (err) {
                   //console.log(err.stack)
                   console.log("Dispositivo no registrado");

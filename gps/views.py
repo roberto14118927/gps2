@@ -38,6 +38,7 @@ from django.core import serializers
 from gps.models import Gpsus
 from gps.models import Gpsub
 from gps.models import Gpson
+from gps.models import Espregister
 
 #importaciones sobre el sistema operativo
 import os
@@ -93,8 +94,7 @@ class BusquedaAjaxView(TemplateView):
 		return HttpResponse(data, content_type='application/json')
 
 class TrazaRuta(TemplateView):
-	def get(self, request, *args, **kwargs):
-    	
+	def get(self, request, *args, **kwargs): 	
 		dateStart = request.GET['dateStart']
 		dateEnd = request.GET['dateEnd']
 		imeig = request.GET['imeig']
@@ -167,3 +167,11 @@ def climas(request):
 	context ={
 	}
 	return render(request,'front/climas.html',context)
+
+@login_required( login_url = 'front:login' )
+def puertas(request):
+	espregister = Espregister.objects.all()
+	context ={
+		'espregister': espregister
+	}
+	return render(request,'front/puertas.html',context)

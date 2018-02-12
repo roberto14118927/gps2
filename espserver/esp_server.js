@@ -15,13 +15,22 @@ const io = require('socket.io')(server);
 const os = require('os');
 const { Pool, Client } = require('pg')
 
-const client = new Client({
+/*const client = new Client({
   user: 'gps',
   host: 'localhost',
   database: 'gpsdb',
   password: 'gps123456',
   port: 5432,
+});*/
+
+const client = new Client({
+  user: 'gps',
+  host: '142.44.162.71',
+  database: 'gpsdb',
+  password: 'gps123456',
+  port: 5432,
 });
+
 client.connect();
 
 var conta = 0;
@@ -77,12 +86,8 @@ io.on('connection', function(socket) {
       
   });
 
-  socket.on('send-data', function(data) {
-    sendData();
-  });
-
-  socket.on('send-data', function(data) {
-      sendData();
+  socket.on('open-esp', function(data) {
+    sendData(data);
   });
 
 });
@@ -123,8 +128,8 @@ var ESP8266 = net.createServer(function(sock) {
                     console.log("Registro exitoso")
                     var dt = new Date();
                     var utcDate = dt.toUTCString();
-                    const text = 'INSERT INTO gps_espregister(mac, date_create) VALUES($1, $2) RETURNING *'
-                    const values = [datosin[0], utcDate]
+                    const text = 'INSERT INTO gps_espregister(mac, date_create, cmp_name) VALUES($1, $2, $3) RETURNING *'
+                    const values = [datosin[0], utcDate, datosin[2]]
                     client.query(text, values, (err, res) => {
                       if (err) {
                           console.log(err.stack)
@@ -175,18 +180,25 @@ ESP8266.on('error', function(e) {
 ESP8266.listen(PORT, PORT);
 
 //FUNCIONES*********************************
-function sendData(){
-  var MAC = '5C:CF:7F:80:E6:8B';
-  if (esp_sockets[MAC]) {
-      try {
-          esp_sockets[MAC].write("Roberto Eduardo Guzman Ruiz");
-          console.log("Enviado")
-      } catch (err) {
-          console.log(err);
-          console.log("Error Envio");
-        } 
-  } 
-  else {
-      console.log("El dispositivo inactivo");
-  }
+function sendData(data){
+  const text = 'SELECT * FROM gps_espregister WHERE id_esp=($1)'
+  const values = [data.id]
+  client.query(text, values, (err, res) => {
+    if (err) {
+        console.log(err.stack)
+    } else {
+        var mac_out = res.rows[0].mac;
+        if (esp_sockets[mac_out]) {
+          try {
+              esp_sockets[mac_out].write("Roberto Eduardo Guzman Ruiz");
+              console.log("Enviado")
+          } catch (err) {
+              console.log("Error Envio");
+            } 
+      } 
+      else {
+          console.log("El dispositivo inactivo");
+      }
+      }
+  });
 }

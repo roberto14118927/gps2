@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 from gps.views import LoginClass
 from gps.views import gps
 from gps.views import climas
+from gps.views import puertas
 from gps.views import logout
 from gps.views import BusquedaAjaxView
 from gps.views import TrazaRuta
@@ -19,6 +20,7 @@ urlpatterns = [
 	url(r'^$', LoginClass.as_view(), name = 'login'),
 	url(r'^gps$', gps, name = 'gps'),
 	url(r'^climas$', climas, name = 'climas'),
+	url(r'^puertas$', puertas, name = 'puertas'),
 	url(r'^logout$', logout, name = 'logout'),
 	url(r'^busqueda_ajax/$', BusquedaAjaxView.as_view()),
 	url(r'^traza_ajax/$', TrazaRuta.as_view()),

@@ -1,3 +1,13 @@
+/*var express = require ('express'); 
+var app = express (); 
+var server = require ('http'). Servidor (aplicación); 
+var io = require ('socket.io') (servidor, {orígenes: 'midominio.com: * http://midominio.com : * http://www.midominio.com:*'} );
+
+server.listen ([PORT NUMBER], [IP], function () { 
+console.log ("Servidor en funcionamiento ..."); 
+});*/
+
+
 var express = require('express');
 var app = express();
 app.use(function(req, res, next) {
@@ -31,7 +41,12 @@ const client = new Client({
   password: 'gps123456',
   port: 5432,
 });
-client.connect();
+
+client.connect()
+//var pg = require('pg');
+
+//DB Connection to String
+//var connect = "postgres://postgres:123456@localhost/gpsdb"
 
 var interfaces = os.networkInterfaces();
 var addresses = [];

@@ -190,14 +190,23 @@ function sendData(data){
         var mac_out = res.rows[0].mac;
         if (esp_sockets[mac_out]) {
           try {
-              esp_sockets[mac_out].write("Roberto Eduardo Guzman Ruiz");
+              esp_sockets[mac_out].write("01");
+              io.emit('status', {
+                status:02
+              });
               console.log("Enviado")
           } catch (err) {
               console.log("Error Envio");
+              io.emit('status', {
+                status:01
+              });
             } 
       } 
       else {
           console.log("El dispositivo inactivo");
+          io.emit('status', {
+            status:00
+          });
       }
       }
   });

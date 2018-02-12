@@ -11,9 +11,11 @@
 <![endif]-->
 <script src="{% static 'plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
 <script src="{% static 'plugins/jquery-cookie/jquery.cookie.js' %}"></script>
+<script src="{% static 'plugins/gritter/js/jquery.gritter.js' %}"></script>
 <!-- ================== END BASE JS ================== -->
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <script src="{% static 'js/funciones.js' %}"></script>
+<script src="{% static 'js/ui-modal-notification.demo.min.js' %}"></script>
 <script src="http://142.44.162.71:1234/socket.io/socket.io.js"></script>
 <script src="{% static 'js/esp.js' %}"></script>
 <script src="{% static 'js/form-plugins.demo.min.js' %}"></script>
@@ -23,6 +25,7 @@
 <script>
 $(document).ready(function() {
   App.init();
+  //Notification.init();
 }); 
 
 </script>

@@ -140,7 +140,9 @@ var ESP8266 = net.createServer(function(sock) {
                   }
                 }
             });
-            
+        break;
+        case "1":
+            console.log("Recepcion de datos");
         break;
       } 
       console.log("CONECTADO: " + Object.keys(esp_sockets).length);

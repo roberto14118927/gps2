@@ -4,10 +4,10 @@ var imei_global = "00000000000";
 var socket = io.connect(URL, {'forceNew': true});
 
 socket.on('status', function(data){
-    console.log(data.status);
-    alert(data.status);
+    //console.log(data.status);
+    //alert(data.status);
     switch (data.status) {
-        case "00":
+        case 0:
         $.gritter.add({
 			title: 'UPGCH',
 			text: 'DISPOSITIVO INACTIVO',
@@ -17,7 +17,7 @@ socket.on('status', function(data){
 		});
         break;
 
-        case "01":
+        case 1:
         $.gritter.add({
 			title: 'UPGCH',
 			text: 'ERROR ENVIADO',
@@ -27,7 +27,7 @@ socket.on('status', function(data){
 		});
         break;
 
-        case "02":
+        case 2:
         $.gritter.add({
 			title: 'UPGCH',
 			text: 'APERTURTA EXITOSA',

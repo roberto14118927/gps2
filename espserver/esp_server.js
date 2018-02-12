@@ -119,6 +119,7 @@ var ESP8266 = net.createServer(function(sock) {
                   //console.log(err.stack)
                   console.log("Dispositivo no registrado");
               } else {
+                  console.log("Dispositivo"); 
                   console.log(res.rows[0])
                 }
             });

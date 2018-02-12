@@ -48,7 +48,7 @@ var global_imei="";
 const esp_sockets = [];
 var web_sockets = [];
 
-var MACIN = "";
+var mac_in = "";
 
 io.on('connection', function(socket) {
     

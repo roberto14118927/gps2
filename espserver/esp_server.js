@@ -191,29 +191,28 @@ function sendData(data){
         console.log(err.stack)
     } else {
        mac_out = res.rows[0].mac;
+       if (esp_sockets[mac_out]) {
+            try {
+                esp_sockets[mac_out].write("01");
+                io.emit('status', {
+                  statusout:"2"
+                });
+                console.log("Enviado")
+            } catch (err) {
+                console.log("Error Envio");
+                io.emit('status', {
+                  statusout:"1"
+                });
+              } 
+        } 
+        else {
+            console.log("El dispositivo inactivo");
+            io.emit('status', {
+              statusout:"0"
+            });
+        }
       }
   });
-
-    if (esp_sockets[mac_out]) {
-      try {
-          esp_sockets[mac_out].write("01");
-          io.emit('status', {
-            statusout:"2"
-          });
-          console.log("Enviado")
-      } catch (err) {
-          console.log("Error Envio");
-          io.emit('status', {
-            statusout:"1"
-          });
-        } 
-  } 
-  else {
-      console.log("El dispositivo inactivo");
-      io.emit('status', {
-        statusout:"0"
-      });
-  }
 }
 
 

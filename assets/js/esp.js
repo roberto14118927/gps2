@@ -5,8 +5,8 @@ var socket = io.connect(URL, {'forceNew': true});
 
 socket.on('status', function(data){
     //console.log(data.status);
-    //alert(data.status);
-    switch (data.status) {
+    alert(data.statusout);
+    /*switch (data.statusout) {
         case 0:
         $.gritter.add({
 			title: 'UPGCH',
@@ -36,7 +36,7 @@ socket.on('status', function(data){
 			time: ''
 		});
         break;
-    } 
+    } */
 });
 
 function open(id) {

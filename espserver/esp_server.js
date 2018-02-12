@@ -181,33 +181,35 @@ ESP8266.listen(PORT, PORT);
 
 //FUNCIONES*********************************
 function sendData(data){
+  var mac_out = "";
   const text = 'SELECT * FROM gps_espregister WHERE id_esp=($1)'
   const values = [data.id]
   client.query(text, values, (err, res) => {
     if (err) {
         console.log(err.stack)
     } else {
-        var mac_out = res.rows[0].mac;
-        if (esp_sockets[mac_out]) {
-          try {
-              esp_sockets[mac_out].write("01");
-              io.emit('status', {
-                status:02
-              });
-              console.log("Enviado")
-          } catch (err) {
-              console.log("Error Envio");
-              io.emit('status', {
-                status:01
-              });
-            } 
-      } 
-      else {
-          console.log("El dispositivo inactivo");
-          io.emit('status', {
-            status:00
-          });
-      }
+       mac_out = res.rows[0].mac;
       }
   });
+
+    if (esp_sockets[mac_out]) {
+      try {
+          esp_sockets[mac_out].write("01");
+          io.emit('status', {
+            statusout:"2"
+          });
+          console.log("Enviado")
+      } catch (err) {
+          console.log("Error Envio");
+          io.emit('status', {
+            statusout:"1"
+          });
+        } 
+  } 
+  else {
+      console.log("El dispositivo inactivo");
+      io.emit('status', {
+        statusout:"0"
+      });
+  }
 }

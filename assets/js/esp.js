@@ -4,6 +4,8 @@ var imei_global = "00000000000";
 var socket = io.connect(URL, {'forceNew': true});
 
 socket.on('status', function(data){
+    console.log(data.status);
+    alert(data.status);
     switch (data.status) {
         case "00":
         $.gritter.add({

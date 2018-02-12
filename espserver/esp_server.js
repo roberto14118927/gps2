@@ -182,17 +182,16 @@ ESP8266.listen(PORT, PORT);
 
 //FUNCIONES*********************************
 function sendData(data){
-  var mac_out = "";
   const text = 'SELECT * FROM gps_espregister WHERE id_esp=($1)'
   const values = [data.id]
   client.query(text, values, (err, res) => {
     if (err) {
         console.log(err.stack)
     } else {
-       mac_out = res.rows[0].mac;
-       if (esp_sockets[mac_out]) {
+       var MAC = res.rows[0].mac;
+       if (esp_sockets[MAC]) {
             try {
-                esp_sockets[mac_out].write("01");
+                esp_sockets[MAC].write("01");
                 io.emit('status', {
                   statusout:"2"
                 });

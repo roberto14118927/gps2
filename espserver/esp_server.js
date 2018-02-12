@@ -16,11 +16,11 @@ const os = require('os');
 const { Pool, Client } = require('pg')
 
 const client = new Client({
-    user: 'gps',
-    host: 'localhost',
-    database: 'climadb',
-    password: 'gps123456',
-    port: 5432,
+  user: 'gps',
+  host: 'localhost',
+  database: 'gpsdb',
+  password: 'gps123456',
+  port: 5432,
 });
 client.connect();
 
@@ -108,15 +108,34 @@ var ESP8266 = net.createServer(function(sock) {
          return;
       }
       switch (datosin[1]) {
-        case "0":
+        case "0": // registro de dispositivo
             esp_sockets[datosin[0]] = sock; 
-            console.log("Registro Ok");
-        break;
-        case "1":
-            console.log("Recepcion de datos");
+            mac_in=datosin[0];
+            const text = 'SELECT * FROM gps_espregister WHERE mac=($1)'
+            const values = [mac_in]
+            client.query(text, values, (err, res) => {
+              done();
+              if (err) {
+                  //console.log(err.stack)
+                  console.log("Dispositivo no registrado");
+              } else {
+                  console.log(res.rows[0])
+                }
+            });
+            /*var dt = new Date();
+            var utcDate = dt.toUTCString();
+            const text = 'INSERT INTO gps_espregister(mac, date_create) VALUES($1, $2) RETURNING *'
+            const values = [datosin[0], utcDate]
+            client.query(text, values, (err, res) => {
+              if (err) {
+                  console.log(err.stack)
+              } else {
+                  console.log(res.rows[0])
+                }
+            });*/
         break;
       } 
-      console.log("DISPOSITIVOS EN LINEA: " + Object.keys(esp_sockets).length);
+      console.log("CONECTADO: " + Object.keys(esp_sockets).length);
     });
     
     sock.on('close', function(data) {

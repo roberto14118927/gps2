@@ -39,4 +39,12 @@ class Gpsub(models.Model):
 	def __str__(self):
 		return self.imei
 
+class Espregister(models.Model):
+	id_esp = models.AutoField(primary_key = True)
+	mac = models.CharField(max_length=255, blank=True, null=True)
+	date_create = models.DateTimeField(default=datetime.date.today)
+
+	def __str__(self):
+		return self.mac
+
 

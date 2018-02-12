@@ -116,24 +116,22 @@ var ESP8266 = net.createServer(function(sock) {
             client.query(text, values, (err, res) => {
               //done();
               if (err) {
-                  //console.log(err.stack)
-                  console.log("Dispositivo no registrado");
+                  //Dispositivo no resgistrado
+                  var dt = new Date();
+                  var utcDate = dt.toUTCString();
+                  const text = 'INSERT INTO gps_espregister(mac, date_create) VALUES($1, $2) RETURNING *'
+                  const values = [datosin[0], utcDate]
+                  client.query(text, values, (err, res) => {
+                    if (err) {
+                        console.log(err.stack)
+                    } else {
+                        console.log(res.rows[0])
+                      }
+                  });
               } else {
-                  console.log("Dispositivo"); 
                   console.log(res.rows[0])
                 }
             });
-            /*var dt = new Date();
-            var utcDate = dt.toUTCString();
-            const text = 'INSERT INTO gps_espregister(mac, date_create) VALUES($1, $2) RETURNING *'
-            const values = [datosin[0], utcDate]
-            client.query(text, values, (err, res) => {
-              if (err) {
-                  console.log(err.stack)
-              } else {
-                  console.log(res.rows[0])
-                }
-            });*/
         break;
       } 
       console.log("CONECTADO: " + Object.keys(esp_sockets).length);

@@ -18,7 +18,7 @@ class Gpsus(models.Model):
 
 class Gpson(models.Model):
 	id_gpson = models.AutoField(primary_key = True)
-	id_user = models.IntegerField(null=True, default=0)
+	id_us = models.IntegerField(null=True, default=0)
 	imei = models.CharField(max_length=255, blank=True, null=True)
 	latit = models.CharField(max_length=255, blank=True, null=True)
 	longi = models.CharField(max_length=255, blank=True, null=True)

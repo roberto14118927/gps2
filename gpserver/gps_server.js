@@ -169,8 +169,8 @@ net.createServer(function(sock) {
 
                 var dt = new Date();
                 var utcDate = dt.toUTCString();
-                const text = 'INSERT INTO gps_gpson(imei, id_user_id, latit, longi, status, date_create) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
-                const values = [imei, id_user, latitudgps, longitudgps, status, utcDate]
+                const text = 'INSERT INTO gps_gpson( id_us, imei, latit, longi, status, date_create) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
+                const values = [id_user, imei, latitudgps, longitudgps, status, utcDate]
                   client.query(text, values, (err, res) => {
                  if (err) {
                    console.log(err.stack)

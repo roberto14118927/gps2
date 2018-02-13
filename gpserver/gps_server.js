@@ -43,10 +43,6 @@ const client = new Client({
 });
 
 client.connect()
-//var pg = require('pg');
-
-//DB Connection to String
-//var connect = "postgres://postgres:123456@localhost/gpsdb"
 
 var interfaces = os.networkInterfaces();
 var addresses = [];

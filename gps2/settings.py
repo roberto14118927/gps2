@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'gps2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE' : 'django.db.backends.postgresql_psycopg2',
-        'NAME' : 'gpsdb',
+        'NAME' : 'gpssdb',
         'USER': 'gps',
         'PASSWORD': 'gps123456',
         'HOST': '142.44.162.71',

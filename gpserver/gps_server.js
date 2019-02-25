@@ -65,9 +65,7 @@ io.on('error',function(err){
   console.error(err)
 });
 
-server.listen(PORT, function(){
-  console.log("Servidor corriendo puerto: " + PORT )
-});
+
 
 net.createServer(function(sock) {
     console.log('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);    

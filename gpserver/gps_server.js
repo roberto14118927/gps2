@@ -1,12 +1,6 @@
 var express = require('express');
 var app = express();
-app.use(function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        res.header("Access-Control-Allow- Headers", "Content-Type");
-        res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
-        next();
-    });
+
 var net = require('net');
 var hex2ascii = require('hex2ascii');
 var mysql = require('mysql');
@@ -25,10 +19,9 @@ for (var k in interfaces) {
   }
 }
 
-app.use(express.static('static/js'))
 
 var HOST = '134.209.76.81';
-var PORT = 3000;
+var PORT = 4000;
 server.listen(5678);
 var arr;
 var arr1;

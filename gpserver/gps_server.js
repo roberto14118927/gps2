@@ -57,8 +57,8 @@ for (var k in interfaces) {
 
 app.use(express.static('static/js'))
 
-var HOST = addresses[2];
-var PORT = 3333;
+var HOST = '134.209.76.81;
+var PORT = 3000;
 server.listen(5678);
 var arr;
 var arr1;

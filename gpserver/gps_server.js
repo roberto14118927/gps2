@@ -23,7 +23,7 @@ var mysql = require('mysql');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var os = require('os');
-const { Pool, Client } = require('pg')
+//const { Pool, Client } = require('pg')
 
 
 /*const client = new Client({
@@ -34,13 +34,13 @@ const { Pool, Client } = require('pg')
   port: 5432,
 });*/
 
-const client = new Client({
+/*const client = new Client({
   user: 'gps',
   host: 'localhost',
   database: 'upgch',
   password: 'gps123456',
   port: 5432,
-});
+});*/
 
 client.connect()
 
@@ -165,7 +165,7 @@ net.createServer(function(sock) {
 
                 var dt = new Date();
                 var utcDate = dt.toUTCString();
-                const text = 'INSERT INTO gps_gpson( id_us, imei, latit, longi, status, date_create) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
+                /*const text = 'INSERT INTO gps_gpson( id_us, imei, latit, longi, status, date_create) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
                 const values = [id_user, imei, latitudgps, longitudgps, status, utcDate]
                   client.query(text, values, (err, res) => {
                  if (err) {
@@ -176,7 +176,7 @@ net.createServer(function(sock) {
                   });  
                    console.log(res.rows[0])
                    }
-               });
+               });*/
                 /*var records1;
                  inserta = [
                   [imei, id_user, latitudgps, longitudgps, status]
@@ -224,7 +224,7 @@ net.createServer(function(sock) {
               conmysql.query('INSERT INTO `gps_gpsub` (`imei`, `latit`, `longi`, `combu`) VALUES ? ',[insertaubi], function (err, result) {
                  if (err) throw err;
                });*/
-               var dt = new Date();
+               /*var dt = new Date();
                 var utcDate = dt.toUTCString();
                 const text = 'INSERT INTO gps_gpsub(imei, latit, longi, combu, date_create) VALUES($1, $2, $3, $4, $5) RETURNING *'
                 const values = [String(imei), String(latitudgps), String(longitudgps),0,utcDate]
@@ -240,7 +240,7 @@ net.createServer(function(sock) {
                     longi:longitudgps,
                     zoom:17,
                     imei:imei
-              });            
+              }); */           
             }
         }
 

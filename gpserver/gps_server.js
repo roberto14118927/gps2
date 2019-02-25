@@ -42,7 +42,7 @@ var os = require('os');
   port: 5432,
 });*/
 
-client.connect()
+//client.connect()
 
 var interfaces = os.networkInterfaces();
 var addresses = [];
